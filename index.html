@@ -1,0 +1,204 @@
+import tkinter as tk
+from tkinter import messagebox
+import pyttsx3
+
+# ==============================
+#       SETTINGS (EDITABLE)
+# ==============================
+
+# ---- Password ----
+ADMIN_PASSWORD = "1234"     # अपना पासवर्ड यहां डालो
+
+# ---- Admin Message (User नहीं बदल सकता) ----
+ADMIN_MESSAGE = """
+I Love You ❤️
+Ye admin ka fixed message hai.
+Isko sirf code me badla ja sakta hai.
+"""
+
+# ---- AI Voice Speed (Slow & Smooth) ----
+VOICE_SPEED = 130   # Default 200 होता है, इसे slow कर दिया
+
+# ==============================
+#       AI VOICE ENGINE
+# ==============================
+
+engine = pyttsx3.init()
+engine.setProperty("rate", VOICE_SPEED)
+
+
+def speak(text):
+    """AI की आवाज में text बोलने के लिए।"""
+    engine.say(text)
+    engine.runAndWait()
+
+
+# ==============================
+#       MAIN APP WINDOW
+# ==============================
+
+root = tk.Tk()
+root.title("❤ Secure Love AI ❤")
+root.geometry("395x560")
+root.resizable(False, False)
+root.config(bg="#1a1a1a")       # Dark romantic theme
+
+
+# ==============================
+#       LOGIN SCREEN
+# ==============================
+
+login_frame = tk.Frame(root, bg="#1a1a1a")
+login_frame.pack(fill="both", expand=True)
+
+tk.Label(
+    login_frame,
+    text="❤ PRIVATE AI ACCESS ❤",
+    fg="pink",
+    bg="#1a1a1a",
+    font=("Arial", 20, "bold")
+).pack(pady=30)
+
+tk.Label(
+    login_frame,
+    text="Enter Password:",
+    fg="white",
+    bg="#1a1a1a",
+    font=("Arial", 14)
+).pack(pady=10)
+
+password_entry = tk.Entry(
+    login_frame,
+    font=("Arial", 16),
+    show="●",
+    width=20
+)
+password_entry.pack(pady=8)
+
+
+def verify_password():
+    """Password check karega — sahi hoga to अंदर जाने देगा"""
+    if password_entry.get() == ADMIN_PASSWORD:
+        login_frame.pack_forget()
+        open_main_ui()
+    else:
+        messagebox.showerror("Access Denied", "Wrong Password ❌")
+        speak("Access Denied")
+
+
+tk.Button(
+    login_frame,
+    text="Unlock",
+    command=verify_password,
+    fg="white",
+    bg="#ff0044",
+    font=("Arial", 13, "bold"),
+    width=12
+).pack(pady=20)
+
+
+# ==============================
+#       MAIN UI SCREEN
+# ==============================
+
+def open_main_ui():
+
+    main_frame = tk.Frame(root, bg="#1a1a1a")
+    main_frame.pack(fill="both", expand=True)
+
+    # ---- Title ----
+    tk.Label(
+        main_frame,
+        text="❤ PRIVATE AI PANEL ❤",
+        fg="pink",
+        bg="#1a1a1a",
+        font=("Arial", 19, "bold")
+    ).pack(pady=12)
+
+    # ============================================
+    #       1) ADMIN MESSAGE (Locked)
+    # ============================================
+
+    admin_box = tk.LabelFrame(
+        main_frame,
+        text="Admin Message ❤️",
+        fg="pink",
+        bg="#1a1a1a",
+        font=("Arial", 13, "bold")
+    )
+    admin_box.pack(fill="x", padx=15, pady=10)
+
+    tk.Label(
+        admin_box,
+        text=ADMIN_MESSAGE,
+        fg="white",
+        bg="#1a1a1a",
+        font=("Arial", 12),
+        justify="left",
+        anchor="w"
+    ).pack(padx=5, pady=8, fill="x")
+
+    # ============================================
+    #       2) USER MESSAGE (Speak)
+    # ============================================
+
+    user_box = tk.LabelFrame(
+        main_frame,
+        text="Your Message 💬",
+        fg="lightblue",
+        bg="#1a1a1a",
+        font=("Arial", 13, "bold")
+    )
+    user_box.pack(fill="x", padx=15, pady=10)
+
+    user_input = tk.Entry(
+        user_box,
+        font=("Arial", 14),
+        width=25
+    )
+    user_input.pack(side="left", padx=8, pady=10)
+
+    def send_user_message():
+        txt = user_input.get()
+        if txt.strip() == "":
+            return
+        speak(txt)
+        messagebox.showinfo("AI", "Message Played in AI Voice ❤️")
+        user_input.delete(0, tk.END)
+
+    tk.Button(
+        user_box,
+        text="Send ❤️",
+        command=send_user_message,
+        fg="white",
+        bg="#ff0066",
+        font=("Arial", 12, "bold")
+    ).pack(side="right", padx=8)
+
+    # ============================================
+    #       3) MEDIA BOX (Future Feature)
+    # ============================================
+
+    media_box = tk.LabelFrame(
+        main_frame,
+        text="Media Player 🎥 (Coming Soon)",
+        fg="yellow",
+        bg="#1a1a1a",
+        font=("Arial", 13, "bold")
+    )
+    media_box.pack(fill="x", padx=15, pady=10)
+
+    tk.Label(
+        media_box,
+        text="Soon you can play Audio / Video / Images here...",
+        fg="white",
+        bg="#1a1a1a",
+        font=("Arial", 11)
+    ).pack(pady=12)
+
+
+# ==============================
+#       START APP
+# ==============================
+
+root.mainloop()
