@@ -63,7 +63,7 @@
     <div class="cardHeader">
       <div class="title"><strong>साइट लॉक</strong><div class="muted" style="font-size:12px;margin-left:8px;"> कृप्या सही पासवर्ड डालें, पासवर्ड डालने पर ही अंदर जा सकते हैं</div></div>
       <div class="controls">
-        <button class="btn" id="lockInfo" data-explain="पासवर्ड बदलने के लिए index.html में ADMIN_PASSWORD बदलिए।">Info</button>
+        <button class="btn" id="lockInfo" data-explain="कृपया यहाँ अपना पासवर्ड दर्ज करें। पासवर्ड वही है जिसका उपयोग आप पहले करते रहे हैं और जिसे याद रखने के लिए कहा गया था। सही पासवर्ड दर्ज करने पर ही साइट एक्सेस होगी।">Info</button>
       </div>
     </div>
     <div style="margin-top:10px;">
@@ -71,7 +71,7 @@
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button class="iconBtn" id="unlockBtn" data-explain="Unlock करने के लिए दबाएँ">Unlock</button>
       </div>
-      <div class="explainTip">टिप: पासवर्ड बदलने के लिए index.html में `ADMIN_PASSWORD` बदलें।</div>
+      <div class="explainTip">टिप: कृपया यहाँ अपना पासवर्ड दर्ज करें। पासवर्ड वही है जिसका उपयोग आप पहले करते रहे हैं और जिसे याद रखने के लिए कहा गया था। सही पासवर्ड दर्ज करने पर ही साइट एक्सेस होगी।</div>
     </div>
   </div>
 
@@ -186,7 +186,7 @@ const ADMIN_PASSWORD = "DTYPL5133"; // ← change this value in code to update p
    System will pick a message daily (based on date) — daily rotation.
    You can add as many messages as you want. These are read-only in UI. */
 const ADMIN_MESSAGES = [
-  "नमस्ते — Priyanka में आपका स्वागत है! ❤️",
+  " लाइफ मे कुछ अच्छा करो यार ",
   "आज का संदेश: खुद पर भरोसा रखो, सब अच्छा होगा।",
   "मधुर शब्द बाँटो, प्यार पाओ।",
   "छोटे छोटे कदम बड़े बदलाव लाते हैं।",
@@ -262,7 +262,11 @@ function attemptUnlock(val){
     return; 
   }
   if(val === ADMIN_PASSWORD){
-    speak("स्वागत है, साइट खुल रही है। यह साइट विशेष लोगों के लिए है।");
+    speak("स्वागत है, साइट खुल रही है। यह साइट विशेष लोगों के लिए है, आप यहाँ तक पहुँच गए हैं, आपका दिल से स्वागत है!
+सबसे पहले आपको एडमिन का संदेश मिलेगा, फिर आप मुझसे चैट कर सकते हैं।
+मैं हर सवाल का जवाब तो नहीं दे पाऊँगी, लेकिन आपके संदेश को एडमिन तक पहुँचाकर सही उत्तर दिलवा सकती हूँ।
+मेरा मॉडल लोकल सर्वर पर होस्ट है, इसलिए मैं कुछ ही बातों का जवाब दे पाऊँगी।
+फिर भी, आप यहाँ खुलकर अपनी बातें रख सकते हैं—आपकी समस्याओं का समाधान ज़रूर किया जाए");
     lockCard.style.display = 'none';
     mainGrid.style.display = 'block';
     // show today's admin message
