@@ -1,204 +1,160 @@
-import tkinter as tk
-from tkinter import messagebox
-import pyttsx3
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤ Secure Love AI ❤</title>
 
-# ==============================
-#       SETTINGS (EDITABLE)
-# ==============================
+<style>
+    body{
+        margin:0;
+        background:#1a1a1a;
+        font-family: Arial;
+        color:white;
+    }
 
-# ---- Password ----
-ADMIN_PASSWORD = "1234"     # अपना पासवर्ड यहां डालो
+    .login-box{
+        width: 330px;
+        margin: 90px auto;
+        padding: 25px;
+        background:#111;
+        border-radius:12px;
+        text-align:center;
+        box-shadow:0 0 10px #ff0066;
+    }
 
-# ---- Admin Message (User नहीं बदल सकता) ----
-ADMIN_MESSAGE = """
-I Love You ❤️
-Ye admin ka fixed message hai.
-Isko sirf code me badla ja sakta hai.
-"""
+    input{
+        width:90%;
+        padding:10px;
+        font-size:17px;
+        border-radius:6px;
+        border:none;
+        outline:none;
+        margin-top:10px;
+    }
 
-# ---- AI Voice Speed (Slow & Smooth) ----
-VOICE_SPEED = 130   # Default 200 होता है, इसे slow कर दिया
+    button{
+        margin-top:20px;
+        padding:10px 20px;
+        background:#ff0066;
+        border:none;
+        color:white;
+        font-size:16px;
+        border-radius:6px;
+        cursor:pointer;
+    }
 
-# ==============================
-#       AI VOICE ENGINE
-# ==============================
+    .panel{
+        display:none;
+        padding:15px;
+    }
 
-engine = pyttsx3.init()
-engine.setProperty("rate", VOICE_SPEED)
+    .box{
+        background:#111;
+        padding:12px;
+        border-radius:10px;
+        margin:10px 0;
+        box-shadow:0 0 8px #ff0088;
+    }
+</style>
 
-
-def speak(text):
-    """AI की आवाज में text बोलने के लिए।"""
-    engine.say(text)
-    engine.runAndWait()
-
-
-# ==============================
-#       MAIN APP WINDOW
-# ==============================
-
-root = tk.Tk()
-root.title("❤ Secure Love AI ❤")
-root.geometry("395x560")
-root.resizable(False, False)
-root.config(bg="#1a1a1a")       # Dark romantic theme
-
-
-# ==============================
-#       LOGIN SCREEN
-# ==============================
-
-login_frame = tk.Frame(root, bg="#1a1a1a")
-login_frame.pack(fill="both", expand=True)
-
-tk.Label(
-    login_frame,
-    text="❤ PRIVATE AI ACCESS ❤",
-    fg="pink",
-    bg="#1a1a1a",
-    font=("Arial", 20, "bold")
-).pack(pady=30)
-
-tk.Label(
-    login_frame,
-    text="Enter Password:",
-    fg="white",
-    bg="#1a1a1a",
-    font=("Arial", 14)
-).pack(pady=10)
-
-password_entry = tk.Entry(
-    login_frame,
-    font=("Arial", 16),
-    show="●",
-    width=20
-)
-password_entry.pack(pady=8)
+</head>
+<body>
 
 
-def verify_password():
-    """Password check karega — sahi hoga to अंदर जाने देगा"""
-    if password_entry.get() == ADMIN_PASSWORD:
-        login_frame.pack_forget()
-        open_main_ui()
-    else:
-        messagebox.showerror("Access Denied", "Wrong Password ❌")
-        speak("Access Denied")
+<!-- PASSWORD SCREEN -->
+<div id="login" class="login-box">
+    <h2 style="color:pink;">❤ PRIVATE AI ACCESS ❤</h2>
+
+    <input type="password" id="pass" placeholder="Enter Password">
+    <button onclick="checkPass()">Unlock</button>
+
+    <p id="error" style="color:red; margin-top:10px;"></p>
+</div>
 
 
-tk.Button(
-    login_frame,
-    text="Unlock",
-    command=verify_password,
-    fg="white",
-    bg="#ff0044",
-    font=("Arial", 13, "bold"),
-    width=12
-).pack(pady=20)
+<!-- MAIN UI -->
+<div id="main" class="panel">
+
+    <h2 style="color:pink; text-align:center;">❤ PRIVATE AI PANEL ❤</h2>
+
+    <!-- ADMIN MESSAGE -->
+    <div class="box">
+        <h3 style="color:pink;">Admin Message ❤️</h3>
+        <p id="adminText">
+            I Love You ❤️<br>
+            Ye admin ka fixed message hai.<br>
+            Isko sirf code me badla ja sakta hai.
+        </p>
+    </div>
+
+    <!-- USER MESSAGE -->
+    <div class="box">
+        <h3 style="color:#66d1ff;">Your Message 💬</h3>
+        <input type="text" id="userMsg" placeholder="Type your message..." style="width:80%;">
+
+        <button onclick="playVoice()" style="background:#ff0077;">Send ❤️</button>
+    </div>
+
+    <!-- MEDIA AREA -->
+    <div class="box">
+        <h3 style="color:yellow;">Media Player 🎥 (Coming Soon)</h3>
+        <p>Soon you can play Audio / Video / Images here...</p>
+    </div>
+
+</div>
 
 
-# ==============================
-#       MAIN UI SCREEN
-# ==============================
 
-def open_main_ui():
+<script>
+// ==========================
+//   PASSWORD CHECK (No Lock)
+// ==========================
 
-    main_frame = tk.Frame(root, bg="#1a1a1a")
-    main_frame.pack(fill="both", expand=True)
+const REAL_PASSWORD = "1234";
 
-    # ---- Title ----
-    tk.Label(
-        main_frame,
-        text="❤ PRIVATE AI PANEL ❤",
-        fg="pink",
-        bg="#1a1a1a",
-        font=("Arial", 19, "bold")
-    ).pack(pady=12)
+function checkPass(){
+    let p = document.getElementById("pass").value;
 
-    # ============================================
-    #       1) ADMIN MESSAGE (Locked)
-    # ============================================
-
-    admin_box = tk.LabelFrame(
-        main_frame,
-        text="Admin Message ❤️",
-        fg="pink",
-        bg="#1a1a1a",
-        font=("Arial", 13, "bold")
-    )
-    admin_box.pack(fill="x", padx=15, pady=10)
-
-    tk.Label(
-        admin_box,
-        text=ADMIN_MESSAGE,
-        fg="white",
-        bg="#1a1a1a",
-        font=("Arial", 12),
-        justify="left",
-        anchor="w"
-    ).pack(padx=5, pady=8, fill="x")
-
-    # ============================================
-    #       2) USER MESSAGE (Speak)
-    # ============================================
-
-    user_box = tk.LabelFrame(
-        main_frame,
-        text="Your Message 💬",
-        fg="lightblue",
-        bg="#1a1a1a",
-        font=("Arial", 13, "bold")
-    )
-    user_box.pack(fill="x", padx=15, pady=10)
-
-    user_input = tk.Entry(
-        user_box,
-        font=("Arial", 14),
-        width=25
-    )
-    user_input.pack(side="left", padx=8, pady=10)
-
-    def send_user_message():
-        txt = user_input.get()
-        if txt.strip() == "":
-            return
-        speak(txt)
-        messagebox.showinfo("AI", "Message Played in AI Voice ❤️")
-        user_input.delete(0, tk.END)
-
-    tk.Button(
-        user_box,
-        text="Send ❤️",
-        command=send_user_message,
-        fg="white",
-        bg="#ff0066",
-        font=("Arial", 12, "bold")
-    ).pack(side="right", padx=8)
-
-    # ============================================
-    #       3) MEDIA BOX (Future Feature)
-    # ============================================
-
-    media_box = tk.LabelFrame(
-        main_frame,
-        text="Media Player 🎥 (Coming Soon)",
-        fg="yellow",
-        bg="#1a1a1a",
-        font=("Arial", 13, "bold")
-    )
-    media_box.pack(fill="x", padx=15, pady=10)
-
-    tk.Label(
-        media_box,
-        text="Soon you can play Audio / Video / Images here...",
-        fg="white",
-        bg="#1a1a1a",
-        font=("Arial", 11)
-    ).pack(pady=12)
+    if(p === REAL_PASSWORD){
+        document.getElementById("login").style.display="none";
+        document.getElementById("main").style.display="block";
+    } 
+    else {
+        document.getElementById("error").innerText = "Wrong Password ❌";
+        speech("Access Denied");
+    }
+}
 
 
-# ==============================
-#       START APP
-# ==============================
 
-root.mainloop()
+// ==========================
+//  AI VOICE (Slow + Smooth)
+// ==========================
+
+function speech(text){
+    let voice = new SpeechSynthesisUtterance(text);
+
+    voice.rate = 0.7;   // Smooth slow voice
+    voice.pitch = 0.9;
+    voice.volume = 1;
+
+    window.speechSynthesis.speak(voice);
+}
+
+function playVoice(){
+    let msg = document.getElementById("userMsg").value;
+
+    if(msg.trim() === "") return;
+
+    speech(msg);
+
+    alert("Message Played in AI Voice ❤️");
+
+    document.getElementById("userMsg").value = "";
+}
+
+</script>
+
+</body>
+    </html>
